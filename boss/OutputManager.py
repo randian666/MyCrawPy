@@ -14,7 +14,7 @@ class OutputManager(object):
                 self._es.indices.create(index='recruit')
                 # self._es.indices.create(index="douban")
             # 将refresh设为true，使得添加的文档可以立即搜索到；
-            self._es.index(index="recruit",doc_type="boss",body={"url":data["url"],"title":data["title"],"wages":data["wages"], "place":data["place"],"experience":data["experience"],"education":data["education"],"tags":data["tags"],"content":data["content"],"company_name":data["company_name"],"company_tag":data["company_tag"],"company_url":data["company_url"],"img":data["img"],"location":data["location"]})
+            self._es.index(index="recruit",doc_type="boss",body={"url":data["url"],"title":data["title"],"wages":data["wages"], "place":data["place"],"experience":data["experience"],"education":data["education"],"tags":data["tags"],"content":data["content"],"company_name":data["company_name"],"company_tag":data["company_tag"],"company_url":data["company_url"],"img":data["img"],"location":data["location"],"source":data["source"],"created":data["created"]})
             # res = self._es.get(index="douban", doc_type="boss", id=01)
             # 根据url查询
             res = self._es.search(index="recruit",doc_type="boss",body={"query": {"match": {'url':data["url"]}}})

@@ -14,7 +14,7 @@ class SpiderMain(object):
     def craw_root(self,root_url):
         # 下载根页面内容
         html_content = self.downloader.download(root_url)
-        new_urls=self.parser._parse_url(rootUrl,html_content)
+        new_urls=self.parser._parse_url(root_url,html_content)
         #把根页面的链接放入链接管理器
         self.urls.add_new_urls(new_urls)
     def craw(self):
@@ -32,11 +32,13 @@ class SpiderMain(object):
                 print("error:",e)
 
 if __name__ == '__main__':
-    rootUrl="http://www.zhipin.com/c101010100/h_101010100/?page=1&ka=page-1"
-    spider=SpiderMain()
-    #解析根页面获取链接地址
-    spider.craw_root(rootUrl)
-    #解析子页面
-    spider.craw()
+    n =1
+    spider = SpiderMain()
+    while n <= 30:
+        #解析根页面获取链接地址
+        spider.craw_root("http://www.zhipin.com/c101010100/h_101010100/?page=%s&ka=page-%s"%(n,n))
+        #解析子页面
+        spider.craw()
+        n=n+1
 
 

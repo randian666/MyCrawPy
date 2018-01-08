@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup
 import re
+import time
 
 class HtmlParser(object):
     #获取指定页面的链接和内容
@@ -35,43 +36,52 @@ class HtmlParser(object):
         return new_urls
     #获取数据
     def _get_new_data(self,url,soup):
-        data={"url":url}
-        job_primary=soup.find_all("div",class_="job-primary")
-        detail_content=soup.find_all("div",class_="detail-content")
-        info_company=soup.find_all("div",class_="info-company")
-        location=soup.find("div",class_="location-address")
-        if job_primary is None:
-            return
-        for p in job_primary:
-            title=p.find("h1",class_="name")
-            # 标题
-            data["title"]=title.contents[0]
-            #工资
-            data["wages"] = title.contents[1].get_text()
-            tag=p.find("p")
-            # 地点
-            data["place"] =tag.contents[0]
-            #经验要求
-            data["experience"] = tag.contents[2]
-            #学历
-            data["education"] = tag.contents[4]
-            #标签
-            job_tags=p.find("div",class_="job-tags").find_all("span")
-            tags="";
-            for tag in job_tags:
-                tags+=(tag.get_text()+"#")
-            data["tags"] =tags
-        for d in detail_content:
-            content=d.find("div",class_="text")
-            data["content"]=content.get_text().strip()
-        for c in info_company:
-            company_name=c.find("h3",class_="name")
-            tag = c.find_all("p")[0]
-            url = c.find_all("p")[1]
-            img=c.find("img").get("src")
-            data["company_name"]=company_name.get_text()
-            data["company_tag"]="%s#%s#%s"%(tag.contents[0],tag.contents[2],tag.contents[4].get_text())
-            data["company_url"]=url.get_text()
-            data["img"]=img
-        data["location"]=location.get_text()
+        data={"url":url,"source":"zhipin","created":time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())}
+        try:
+            job_primary=soup.find_all("div",class_="job-primary")
+            detail_content=soup.find_all("div",class_="detail-content")
+            info_company=soup.find_all("div",class_="info-company")
+            location=soup.find("div",class_="location-address")
+            if job_primary is None:
+                return
+            for p in job_primary:
+                title=p.find("h1",class_="name")
+                #标题
+                data["title"]=title.contents[0]
+                #工资
+                data["wages"] = title.contents[1].get_text()
+                tag=p.find("p")
+                #地点
+                data["place"] =tag.contents[0]
+                #经验要求
+                data["experience"] = tag.contents[2]
+                #学历
+                data["education"] = tag.contents[4]
+                #职位标签
+                job_tags=p.find("div",class_="job-tags").find_all("span")
+                tags="";
+                for tag in job_tags:
+                    tags+=(tag.get_text()+"#")
+                data["tags"] =tags
+            for d in detail_content:
+                content=d.find("div",class_="text")
+                #职位描述
+                data["content"]=content.get_text().strip()
+            for c in info_company:
+                company_name=c.find("h3",class_="name")
+                tag = c.find_all("p")[0]
+                url = c.find_all("p")[1]
+                img=c.find("img").get("src")
+                #公司名称
+                data["company_name"]=company_name.get_text()
+                #公司标签
+                data["company_tag"]="%s#%s#%s"%(tag.contents[0],tag.contents[2],tag.contents[4].get_text())
+                #公司网址
+                data["company_url"]=url.get_text()
+                #公司logo
+                data["img"]=img
+                #公司地址
+            data["location"]=location.get_text()
+        except  Exception as e:
+            print(e)
         return data
