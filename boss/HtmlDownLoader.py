@@ -10,9 +10,9 @@ from boss import HtmlParser
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
         print('begin down url is ',url)
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0',
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
                    'Referer':'http://www.zhipin.com/',
-                   'Host':'zhipin.com'}
+                   'Host':'www.zhipin.com'}
         try:
             req=request.Request(url,headers=headers)
             reponse=request.urlopen(req,timeout=2000)
