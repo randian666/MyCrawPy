@@ -6,11 +6,12 @@
 '''
 from urllib import request
 from boss import HtmlParser
-
+import time
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
+        time.sleep(5)
         print('begin down url is ',url)
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24',
                    'Referer':'http://www.zhipin.com/',
                    'Host':'www.zhipin.com'}
         try:
@@ -29,10 +30,10 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="http://www.zhipin.com/job_detail/1416630940.html"
+    url="http://www.zhipin.com/job_detail/1416704802.html"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     print(data)
-    # parser=HtmlParser.HtmlParser()
-    # new_datas=parser._parse_data(url,data)
-    # print(new_datas)
+    parser=HtmlParser.HtmlParser()
+    new_datas=parser._parse_data(url,data)
+    print(new_datas)
