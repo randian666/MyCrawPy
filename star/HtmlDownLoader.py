@@ -5,7 +5,7 @@
 对指定的URL网页内容进行下载。
 '''
 from urllib import request
-from boss import HtmlParser
+from star import HtmlParser
 import time
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
@@ -30,10 +30,10 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="http://v.qq.com/x/star/80597?tabid=2"
+    url="http://v.qq.com/x/star/80597&tabid=2"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     print(data)
-    # parser=HtmlParser.HtmlParser()
-    # new_datas=parser._parse_data(url,data)
-    # print(new_datas)
+    parser=HtmlParser.HtmlParser()
+    new_urls=parser._parse_url(url,data)
+    print(new_urls)
