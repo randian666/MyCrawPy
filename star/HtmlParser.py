@@ -42,10 +42,16 @@ class HtmlParser(object):
         star_image=[]
         star_related=[]
         try:
+            #头像
+            star_pic=soup.find("div",class_="star_pic").find("img")["src"]
+            data["star_pic"]=star_pic
+            #姓名
             name=soup.find("div",class_="star_name")
             data["name"]=name.get_text()
+            #百科
             wiki_content=soup.find("div",class_="wiki_content")
             data["wiki_content"]=wiki_content.get_text()
+            #艺人信息
             line=soup.find("div",class_="wiki_info_1").find_all("div",class_="line")
             for s in line:
                lable=s.find("span",class_="lable").get_text()
@@ -58,10 +64,12 @@ class HtmlParser(object):
                star_info[lable]=content
             if star_info:
                 data["star_info"]=json.dumps(star_info,ensure_ascii=False)
+            #艺人高清大图
             imges=soup.find("div",class_="mod_pics_waterfall").find_all("span",class_="pic_item")
             for i in imges:
                 star_image.append(i["data-pic"])
             data["star_image"]=star_image
+            #相关明星
             peoples=soup.find("div",class_="mod_people_inner").find_all("div",class_="people_item")
             for p in peoples:
                 partner_info={}
