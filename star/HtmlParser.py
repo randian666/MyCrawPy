@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 import re
 import time
+import json
 
 class HtmlParser(object):
     #获取指定页面的链接和内容
@@ -36,52 +37,41 @@ class HtmlParser(object):
         return new_urls
     #获取数据
     def _get_new_data(self,url,soup):
-        data={"url":url,"source":"zhipin","created":time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())}
+        data={"url":url,"source":"v.qq.com","created":time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())}
+        star_info = {}
+        star_image=[]
+        star_related=[]
         try:
-            job_primary=soup.find_all("div",class_="job-primary")
-            detail_content=soup.find_all("div",class_="detail-content")
-            info_company=soup.find_all("div",class_="info-company")
-            location=soup.find("div",class_="location-address")
-            if job_primary is None:
-                return
-            for p in job_primary:
-                title=p.find("h1",class_="name")
-                #标题
-                data["title"]=title.contents[0]
-                #工资
-                data["wages"] = title.contents[1].get_text()
-                tag=p.find("p")
-                #地点
-                data["place"] =tag.contents[0]
-                #经验要求
-                data["experience"] = tag.contents[2]
-                #学历
-                data["education"] = tag.contents[4]
-                #职位标签
-                job_tags=p.find("div",class_="job-tags").find_all("span")
-                tags="";
-                for tag in job_tags:
-                    tags+=(tag.get_text()+"#")
-                data["tags"] =tags
-            for d in detail_content:
-                content=d.find("div",class_="text")
-                #职位描述
-                data["content"]=content.get_text().strip()
-            for c in info_company:
-                company_name=c.find("h3",class_="name")
-                tag = c.find_all("p")[0]
-                url = c.find_all("p")[1]
-                img=c.find("img").get("src")
-                #公司名称
-                data["company_name"]=company_name.get_text()
-                #公司标签
-                data["company_tag"]="%s#%s#%s"%(tag.contents[0],tag.contents[2],tag.contents[4].get_text())
-                #公司网址
-                data["company_url"]=url.get_text()
-                #公司logo
-                data["img"]=img
-                #公司地址
-            data["location"]=location.get_text()
+            name=soup.find("div",class_="star_name")
+            data["name"]=name.get_text()
+            wiki_content=soup.find("div",class_="wiki_content")
+            data["wiki_content"]=wiki_content.get_text()
+            line=soup.find("div",class_="wiki_info_1").find_all("div",class_="line")
+            for s in line:
+               lable=s.find("span",class_="lable").get_text()
+               content = s.find("span", class_="content").get_text()
+               star_info[lable]=content
+            line2 = soup.find("div", class_="wiki_info_2").find_all("div", class_="line")
+            for s in line2:
+               lable=s.find("span",class_="lable").get_text()
+               content = s.find("span", class_="content").get_text()
+               star_info[lable]=content
+            if star_info:
+                data["star_info"]=json.dumps(star_info,ensure_ascii=False)
+            imges=soup.find("div",class_="mod_pics_waterfall").find_all("span",class_="pic_item")
+            for i in imges:
+                star_image.append(i["data-pic"])
+            data["star_image"]=star_image
+            peoples=soup.find("div",class_="mod_people_inner").find_all("div",class_="people_item")
+            for p in peoples:
+                partner_info={}
+                partner=p.find("span",class_="people_partner").get_text()
+                name=p.find("a",class_="people_name").get_text()
+                image=p.find("img",class_="avatar_pic")["src"]
+                partner_info[partner]=name
+                partner_info["image"]=image
+                star_related.append(partner_info)
+            data["star_related"]=json.dumps(star_related,ensure_ascii=False)
         except  Exception as e:
             print(e)
         return data

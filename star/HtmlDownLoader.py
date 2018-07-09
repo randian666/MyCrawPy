@@ -7,6 +7,7 @@
 from urllib import request
 from star import HtmlParser
 import time
+import json
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
         time.sleep(5)
@@ -37,3 +38,6 @@ if __name__ == '__main__':
     parser=HtmlParser.HtmlParser()
     new_urls=parser._parse_url(url,data)
     print(new_urls)
+    parser_data=parser._parse_data(url,data)
+    print(json.dumps(parser_data,ensure_ascii=False))
+
