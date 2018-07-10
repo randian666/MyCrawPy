@@ -5,7 +5,7 @@
 对指定的URL网页内容进行下载。
 '''
 from urllib import request
-from star import HtmlParser
+from star import HtmlParser,OutputManager
 import time
 import json
 class HtmlDownLoader(object):
@@ -39,5 +39,7 @@ if __name__ == '__main__':
     new_urls=parser._parse_url(url,data)
     print(new_urls)
     parser_data=parser._parse_data(url,data)
-    print(json.dumps(parser_data,ensure_ascii=False))
+    # print(json.dumps(parser_data,ensure_ascii=False))
+    out=OutputManager.OutputManager()
+    out._add_data_to_es(parser_data)
 
