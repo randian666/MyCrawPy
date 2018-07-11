@@ -14,7 +14,7 @@ class UrlManager(object):
         self.new_urls_key="new_urls_"+time.strftime('%Y-%m-%d',time.localtime())
         #已爬过的链接集合
         self.used_urls_key="used_urls_"+time.strftime('%Y-%m-%d',time.localtime())
-        self.r = redis.Redis(host='140.143.240.63', port=6379,db=0,password='MX+A#3ADX$P',socket_timeout=1000)
+        self.r = redis.Redis(host='140.143.240.63', port=6379,db=0,password='1qaz@WSX',socket_timeout=1000)
     #添加链接地址
     def add_new_url(self,url):
         if url is None:
@@ -44,8 +44,8 @@ class UrlManager(object):
         return temp_url
 if __name__ == '__main__':
     m=UrlManager();
-    # m.add_new_url("www.jd.com")
-    # print(m.has_new_url())
+    m.add_new_url("www.jd.com")
+    print(m.has_new_url())
     # print(m.get_new_url())
     print(m.r.delete(m.used_urls_key))
     print(m.r.delete(m.new_urls_key))

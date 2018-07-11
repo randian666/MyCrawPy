@@ -10,7 +10,6 @@ import time
 import json
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
-        time.sleep(5)
         print('begin down url is ',url)
         headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24',
                    'Referer':'http://v.qq.com/',
@@ -31,7 +30,7 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="http://v.qq.com/x/star/80597&tabid=2"
+    url="http://v.qq.com/doki/star?id=72781&tabid=2"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     print(data)

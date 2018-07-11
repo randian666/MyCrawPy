@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from star import UrlManager as u,HtmlDownLoader as d,HtmlParser as p,OutputManager as o
+import time
 class SpiderMain(object):
     def __init__(self):
         #url链接管理器
@@ -20,6 +21,8 @@ class SpiderMain(object):
     def craw(self):
         while self.urls.has_new_url():
             try:
+                #5秒钟爬一次
+                time.sleep(5)
                 #从url管理器中获取一个链接
                 new_url=self.urls.get_new_url()
                 #下载页面内容

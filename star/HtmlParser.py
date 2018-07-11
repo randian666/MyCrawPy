@@ -65,20 +65,24 @@ class HtmlParser(object):
             if star_info:
                 data["star_info"]=json.dumps(star_info,ensure_ascii=False)
             #艺人高清大图
-            imges=soup.find("div",class_="mod_pics_waterfall").find_all("span",class_="pic_item")
-            for i in imges:
-                star_image.append(i["data-pic"])
+            imges=soup.find("div",class_="mod_pics_waterfall")
+            if imges:
+                starimges=imges.find_all("span", class_="pic_item")
+                for i in starimges:
+                    star_image.append(i["data-pic"])
             data["star_image"]=star_image
             #相关明星
-            peoples=soup.find("div",class_="mod_people_inner").find_all("div",class_="people_item")
-            for p in peoples:
-                partner_info={}
-                partner=p.find("span",class_="people_partner").get_text()
-                name=p.find("a",class_="people_name").get_text()
-                image=p.find("img",class_="avatar_pic")["src"]
-                partner_info[partner]=name
-                partner_info["image"]=image
-                star_related.append(partner_info)
+            peoples=soup.find("div",class_="mod_people_inner")
+            if peoples:
+                people_item=peoples.find_all("div", class_="people_item")
+                for p in people_item:
+                    partner_info={}
+                    partner=p.find("span",class_="people_partner").get_text()
+                    name=p.find("a",class_="people_name").get_text()
+                    image=p.find("img",class_="avatar_pic")["src"]
+                    partner_info[partner]=name
+                    partner_info["image"]=image
+                    star_related.append(partner_info)
             data["star_related"]=json.dumps(star_related,ensure_ascii=False)
         except  Exception as e:
             print(e)
