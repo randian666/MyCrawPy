@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from boss import HtmlParser as p
+from lagou import HtmlParser as p
 from common import UrlManager as u,HtmlDownLoader as d,OutputManager as o
 class SpiderMain(object):
     def __init__(self):
@@ -22,11 +22,10 @@ class SpiderMain(object):
     def craw(self):
         while self.urls.has_new_url():
             try:
-                currUrl = self.urls.get_new_url()
-                for i in range(10):
+                currUrl=self.urls.get_new_url()
+                for i in range(30):
                     #从url管理器中获取一个链接
-                    new_url="%s%s%s"%("https://www.zhipin.com",currUrl,"?page="+str(i+1)+"&ka=page-"+str(i+1))
-                    print(new_url)
+                    new_url="%s%s"%(currUrl,""+str(i+1)+"/?filterOption="+str(i+1)+"")
                     #下载页面内容
                     html_content=self.downloader.download(new_url)
                     if html_content is None:
@@ -40,15 +39,11 @@ class SpiderMain(object):
                 print("error:",e)
 
 if __name__ == '__main__':
-    n =1
     spider = SpiderMain()
     # while n <= 30:
-        #解析根页面获取链接地址
-    # spider.craw_root("http://www.zhipin.com/c101010100/h_101010100/?page=%s&ka=page-%s"%(n,n))
-    spider.craw_root("https://www.zhipin.com/")
+    spider.craw_root("https://www.lagou.com/")
     #解析子页面
     spider.craw()
-    # n=n+1
 
 
 

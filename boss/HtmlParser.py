@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 import re
 import time
+from common import Recruit as recruit
 
 class HtmlParser(object):
     #获取指定页面的链接和内容
@@ -44,35 +45,40 @@ class HtmlParser(object):
             ul=joblist.find('ul')
             li=ul.find_all('li')
             for l in li:
-                data = {"url": url, "source": "BOSS直聘", "created": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}
+                d =recruit.Recruit()
+                d.url=url
+                d.suggestCity="北京站"
+                d.source="BOSS直聘"
+                d.created=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+                # data = {"url": url,"suggestCity":"北京站","source": "BOSS直聘", "created": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}
                 primary =l.find('div',class_='info-primary')
                 if primary is not None:
-                    data['title']=primary.find('div',class_='job-title').get_text()
-                    data['salary']=primary.find('span',class_='red').get_text()
+                    d.title=primary.find('div',class_='job-title').get_text()
+                    d.salary=primary.find('span',class_='red').get_text()
                     a=primary.find_all('a')[0]
-                    data['job_url']="https://www.zhipin.com"+a["href"]
+                    d.job_url="https://www.zhipin.com"+a["href"]
                     infoPrimary=primary.find('p')
                     if len(infoPrimary.contents)>0:
-                        data['place'] = infoPrimary.contents[0]
+                        d.place = infoPrimary.contents[0]
                     if len(infoPrimary.contents) > 2:
-                        data['experience'] = infoPrimary.contents[2]
+                        d.experience = infoPrimary.contents[2]
                     if len(infoPrimary.contents) > 4:
-                        data['education'] = infoPrimary.contents[4]
+                        d.education = infoPrimary.contents[4]
                 company =l.find('div',class_='info-company')
                 if company is not None:
-                    data['company'] = company.find_all('a')[0].get_text()
-                    data['company_url'] = "https://www.zhipin.com" + company.find_all('a')[0]["href"]
+                    d.company = company.find_all('a')[0].get_text()
+                    d.company_url = "https://www.zhipin.com" + company.find_all('a')[0]["href"]
                     infoCompany = company.find('p')
                     if len(infoCompany.contents)>0:
-                        data['company_type']=infoCompany.contents[0]
+                        d.company_type=infoCompany.contents[0]
                     if len(infoCompany.contents)>2:
-                        data['company_financing']=infoCompany.contents[2]
+                        d.company_financing=infoCompany.contents[2]
                     if len(infoCompany.contents)>4:
-                        data['company_size']=infoCompany.contents[4]
+                        d.company_size=infoCompany.contents[4]
                 publis=l.find('div',class_='info-publis')
                 if publis is not None:
-                    data['publis_time']=publis.find('p').get_text()
-                listJob.append(data)
+                    d.publis_time=publis.find('p').get_text()
+                listJob.append(d.__dict__)
         except  Exception as e:
             raise e
         return listJob

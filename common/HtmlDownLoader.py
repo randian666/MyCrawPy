@@ -5,19 +5,24 @@
 对指定的URL网页内容进行下载。
 '''
 from urllib import request
-from boss import HtmlParser
-from boss import OutputManager
+from lagou import HtmlParser
+from common import OutputManager
 import time
 import ssl
+import random
 
+agent=["Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36",
+       'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
+       'Opera/8.0 (Windows NT 5.1; U; en)',
+       'Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.50',
+       'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera 9.50',
+       'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2']
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
-        time.sleep(2)
+        time.sleep(3)
         context = ssl._create_unverified_context()
         print('begin down url is ',url)
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
-                   "Accept-Encoding":"gzip",
-                   "Accept-Language":"zh-CN,zh;q=0.8",
+        headers = {'User-Agent': random.choice(agent),
                    "Referer":url,
                    'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'}
         try:
@@ -35,7 +40,7 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="https://www.zhipin.com/c101010100-p100101/?page=1&ka=page-1"
+    url="https://www.lagou.com/zhaopin/HR/1/?filterOption=1"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     # print(data)
