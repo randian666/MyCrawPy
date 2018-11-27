@@ -47,7 +47,7 @@ if __name__ == '__main__':
     # spider.craw_root("http://www.zhipin.com/c101010100/h_101010100/?page=%s&ka=page-%s"%(n,n))
     spider.craw_root("https://www.zhipin.com/")
     #解析子页面
-    spider.craw()
+    # spider.craw()
     # n=n+1
 
 

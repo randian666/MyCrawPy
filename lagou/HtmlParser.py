@@ -40,14 +40,18 @@ class HtmlParser(object):
     def _get_new_data(self, url, soup):
         listJob = []
         try:
-            keywords = soup.find(attrs={"name": "keywords"})['content']
+            keywords=soup.find(attrs={"name": "keywords"})
+            if keywords is not None:
+                keywords = keywords['content']
             inputKey=soup.find('input',id='keyword')
             if inputKey is not None:
                 inputKey=inputKey['value']
             joblist = soup.find('div', class_='s_position_list ')
             if joblist is None:
-                return
+                return listJob
             ul = joblist.find('ul',class_='item_con_list')
+            if ul is None:
+                return listJob
             li = ul.find_all('li')
             for l in li:
                 d = recruit.Recruit()
@@ -90,5 +94,5 @@ class HtmlParser(object):
                         d.company_size = industry.get_text().split('/')[2].strip()
                 listJob.append(d.__dict__)
         except  Exception as e:
-            raise e
+            print(e)
         return listJob

@@ -18,9 +18,9 @@ class SpiderMain(object):
         new_urls=self.parser._parse_url(root_url,html_content)
         #把根页面的链接放入链接管理器
         self.urls.add_new_urls(new_urls)
-        print(self.urls.new_url_size())
     def craw(self):
         while self.urls.has_new_url():
+            print('当前未爬的url个数为：'+str(self.urls.new_url_size()))
             try:
                 currUrl=self.urls.get_new_url()
                 for i in range(30):

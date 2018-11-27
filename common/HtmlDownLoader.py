@@ -19,7 +19,7 @@ agent=["Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Geck
        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2']
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
-        time.sleep(3)
+        time.sleep(1)
         context = ssl._create_unverified_context()
         print('begin down url is ',url)
         headers = {'User-Agent': random.choice(agent),
