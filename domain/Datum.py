@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-
+'''
+资讯实体类
+'''
 class Datum(object):
 
     def __init__(self):
