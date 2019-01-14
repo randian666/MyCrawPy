@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-URL管理器
+URL管理器，主要提供未爬的url存储和url去重
 new_urls管理新的链接地址并且去重
 used_urls管理已经爬取过的链接地址
 '''
