@@ -6,25 +6,14 @@
 '''
 from urllib import request
 from qichacha import HtmlParser
-from common import OutputManager
 from urllib.parse import urlparse
 import time
-import ssl
-import random
 import requests
 
-agent=['Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36',
-       'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50',
-       'Opera/8.0 (Windows NT 5.1; U; en)',
-       'Mozilla/5.0 (Windows NT 5.1; U; en; rv:1.8.1) Gecko/20061208 Firefox/2.0.0 Opera 9.50',
-       'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; en) Opera 9.50',
-       'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.57.2 (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2']
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8"):
         #避免被反爬虫
         time.sleep(3)
-        #支持https网站爬取
-        context = ssl._create_unverified_context()
         print('begin down url is ',url)
         host = urlparse(url).netloc
         headers = {
