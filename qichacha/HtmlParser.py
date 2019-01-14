@@ -63,8 +63,7 @@ class HtmlParser(object):
                     if "天前" in publicTimeStr:
                         timeCount = re.sub("\D", "", publicTimeStr)
                         realTime = datetime.date.today() - datetime.timedelta(days=int(timeCount))
-                        publicTimeStr=realTime
-                    datum.public_time=publicTimeStr
+                    datum.public_time=realTime
             listDatum.append(datum.__dict__)
         except  Exception as e:
             raise e
