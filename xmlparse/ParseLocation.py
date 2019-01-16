@@ -7,11 +7,11 @@ import pymysql
 import uuid
 
 #分别填写IP、用户名、密码、库名
-db = pymysql.connect("","","","" )
+db = pymysql.connect("47.100.210.195","wuyu","1^m%%DZ0JaSQdIQ#","stream" )
 
-DOMTree=parse("LocList.xml")
+DOMTree=parse("LocList_us.xml")
 #en_us、zh_cn
-local = 'zh_cn'
+local = 'en_us'
 collection=DOMTree.documentElement
 countryRegion = collection.getElementsByTagName("CountryRegion")
 with db.cursor() as cursor:
@@ -23,8 +23,8 @@ with db.cursor() as cursor:
     for country in countryRegion:
         #国家
         if country.hasAttribute("Name") and country.hasAttribute("Code"):
-            countrySql="INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
-                       %(uuid.uuid1(),0,country.getAttribute("Code"),country.getAttribute("Name"),local,1)
+            countrySql='''INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES("%s",%d,"%s","%s","%s",%d)''' \
+                       %(uuid.uuid1(),0,str(country.getAttribute("Code")),country.getAttribute("Name"),local,1)
             # 执行sql语句
             cursor.execute(countrySql)
             #省会主键ID
@@ -34,18 +34,22 @@ with db.cursor() as cursor:
         state=country.getElementsByTagName("State")
         for sta in state:
             if sta.hasAttribute("Name") and sta.hasAttribute("Code"):
-                staSql = "INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
-                             % (uuid.uuid1(), countryId, sta.getAttribute("Code"), sta.getAttribute("Name"), local, 2)
+                staSql ='''INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES("%s",%d,"%s","%s","%s",%d)''' \
+                             % (uuid.uuid1(), countryId, str(sta.getAttribute("Code")), sta.getAttribute("Name"), local, 2)
                 # 执行sql语句
                 cursor.execute(staSql)
                 staId=db.insert_id()
                 print("省会: %s,code:%s" % (sta.getAttribute("Name"), sta.getAttribute("Code")))
+            else:
+                #如果省会节点为空就用国家ID
+                staId=countryId
             #市区
             citys=sta.getElementsByTagName("City")
             for city in citys:
                 if city.hasAttribute("Name") and city.hasAttribute("Code"):
-                    citySql ="INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
-                             % (uuid.uuid1(), staId, city.getAttribute("Code"), city.getAttribute("Name"), local, 3)
+                    citySql ='''INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES("%s",%d,"%s","%s","%s",%d)''' \
+                             % (uuid.uuid1(), staId, str(city.getAttribute("Code")), city.getAttribute("Name"), local, 3)
+                    print(citySql)
                     # 执行sql语句
                     cursor.execute(citySql)
                     cityId = db.insert_id()
@@ -54,8 +58,8 @@ with db.cursor() as cursor:
                 #县城
                 for region in regions:
                     if region.hasAttribute("Name") and region.hasAttribute("Code"):
-                        regionSql ="INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
-                                 % (uuid.uuid1(), cityId, region.getAttribute("Code"), region.getAttribute("Name"), local, 4)
+                        regionSql ='''INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES("%s",%d,"%s","%s","%s",%d)''' \
+                                 % (uuid.uuid1(), cityId, str(region.getAttribute("Code")), region.getAttribute("Name"), local, 4)
                         # 执行sql语句
                         cursor.execute(regionSql)
                         print("县城: %s,code:%s" % (region.getAttribute("Name"), region.getAttribute("Code")))
