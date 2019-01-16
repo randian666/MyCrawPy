@@ -6,6 +6,7 @@ import xml.dom.minidom
 import pymysql
 import uuid
 
+#分别填写IP、用户名、密码、库名
 db = pymysql.connect("","","","" )
 
 DOMTree=parse("LocList.xml")
