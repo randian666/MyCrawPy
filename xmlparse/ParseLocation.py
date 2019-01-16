@@ -7,7 +7,7 @@ import pymysql
 import uuid
 
 #分别填写IP、用户名、密码、库名
-db = pymysql.connect("47.100.210.195","wuyu","1^m%%DZ0JaSQdIQ#","stream" )
+db = pymysql.connect("","wuyu","","stream" )
 
 DOMTree=parse("LocList_us.xml")
 #en_us、zh_cn
