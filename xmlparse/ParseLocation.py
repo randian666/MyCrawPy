@@ -21,7 +21,6 @@ with db.cursor() as cursor:
     data = cursor.fetchone()
     print("Database version : %s " % data)
     for country in countryRegion:
-        countryId=''
         #国家
         if country.hasAttribute("Name") and country.hasAttribute("Code"):
             countrySql="INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
