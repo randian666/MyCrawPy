@@ -10,6 +10,8 @@ import uuid
 db = pymysql.connect("","","","" )
 
 DOMTree=parse("LocList.xml")
+#en_us、zh_cn
+local = 'zh_cn'
 collection=DOMTree.documentElement
 countryRegion = collection.getElementsByTagName("CountryRegion")
 with db.cursor() as cursor:
@@ -19,14 +21,9 @@ with db.cursor() as cursor:
     data = cursor.fetchone()
     print("Database version : %s " % data)
     for country in countryRegion:
-        local = ''
         countryId=''
         #国家
         if country.hasAttribute("Name") and country.hasAttribute("Code"):
-            if country.getAttribute("Code")=='1':
-                local='zh_cn'
-            else:
-                local='en_us'
             countrySql="INSERT INTO data_location(uuid,parent_id,code,name,lang,layer) VALUES('%s',%d,'%s','%s','%s',%d)" \
                        %(uuid.uuid1(),0,country.getAttribute("Code"),country.getAttribute("Name"),local,1)
             # 执行sql语句
