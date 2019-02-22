@@ -45,6 +45,12 @@ class HtmlParser(object):
                 dataInfo = {}
                 print(item)
                 listData.append(dataInfo)
+
+            gridAlternateItem = soup.find_all('tr', class_='gridAlternateItem')
+            for item in gridAlternateItem:
+                dataInfo = {}
+                print(item)
+                listData.append(dataInfo)
         except  Exception as e:
             print(e)
         return listData
