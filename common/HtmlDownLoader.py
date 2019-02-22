@@ -5,7 +5,7 @@
 对指定的URL网页内容进行下载。
 '''
 from urllib import request
-from qichacha import HtmlParser
+from morningstar import HtmlParser
 from urllib.parse import urlparse
 import time
 import requests
@@ -38,13 +38,15 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="https://www.qichacha.com/news_index.shtml?p=1"
+    url="http://cn.morningstar.com/quickrank/default.aspx"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     # print(data)
+
     parser=HtmlParser.HtmlParser()
-    new_urls =parser._parse_url(url, data)
-    print(new_urls)
+    result=parser._parse_data(url,data)
+    # new_urls =parser._parse_url(url, data)
+    # print(new_urls)
     # print(new_datas)
     # esManager=OutputManager.OutputManager()
     # esManager._add_data_to_es(new_datas)
