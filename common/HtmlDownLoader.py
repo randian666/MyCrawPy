@@ -11,7 +11,7 @@ import time
 import requests
 
 class HtmlDownLoader(object):
-    def download(self,url,html_encode="utf-8"):
+    def download(self,url,html_encode="utf-8",headersArgs=None):
         #避免被反爬虫
         time.sleep(3)
         print('begin down url is ',url)
@@ -27,6 +27,8 @@ class HtmlDownLoader(object):
             'X-Requested-With': 'XMLHttpRequest',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.104 Safari/537.36 Core/1.53.4882.400 QQBrowser/9.7.13059.400'
         }
+        if headersArgs is not None:
+            headers={**headers,**headersArgs}
         try:
             reqs = requests.get(url, headers=headers, timeout=30)
             if reqs.status_code!=200:
@@ -38,15 +40,8 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="http://cn.morningstar.com/quickrank/default.aspx"
+    url="http://www.lagou.com/jobs/5617112.html?show=13cb3d09998246c0895dd6e4433077b5"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
-    # print(data)
+    print(data)
 
-    parser=HtmlParser.HtmlParser()
-    result=parser._parse_data(url,data)
-    # new_urls =parser._parse_url(url, data)
-    # print(new_urls)
-    # print(new_datas)
-    # esManager=OutputManager.OutputManager()
-    # esManager._add_data_to_es(new_datas)

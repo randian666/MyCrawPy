@@ -6,7 +6,7 @@ class OutputManager(object):
     def __init__(self,index,type):
         self.index=index
         self.type=type
-        self._es= Elasticsearch([{'host':'103.202.98.133','port':9200}])
+        self._es = Elasticsearch(['39.97.240.232'], http_auth=('elastic', 'wuyuexpack'), timeout=9200)
     #添加数据到ES
     def _add_data_to_es(self,data):
         try:
