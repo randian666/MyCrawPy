@@ -51,7 +51,7 @@ def get_json(url, datas):
     for job in info:
         information = {}
         information['uuid']=str(uuid.uuid1())
-        information['userId']="刘勋"
+        information['userId']="148"
         information['firmId'] = ""  #所属公司编号
         information['online'] = "" #在线状态
         information['jobId'] = "-1" #职位类型编号
@@ -69,41 +69,28 @@ def get_json(url, datas):
         information['createTime'] = (job['createTime'])  # 创建时间
         information['updateTime'] = (job['createTime'])  # 更新时间
         information['workTypeLabel'] = (job['jobNature'])  # 工作性质
-
         information['longitude']=(job['longitude'])  # 经度
         information['latitude']=(job['latitude'])  # 纬度
-
         information['cityName']=(job['city'])  # 岗位对应城市
-
         information['firmName']=(job['companyFullName'])  # 公司全名
-
         information['firmLogo'] = (job['companyLogo'])  # 公司logo
-
         information['affordTags']=",".join(job['companyLabelList'])  # 福利待遇
-        information['demandTags']=",".join(job['skillLables'])  # 技能要求
-
+        information['skillTags']=",".join(job['skillLables'])  # 技能要求
         information['cityAddress']=(job['district'])  # 工作地点
-
         information['workEduLabel']=(job['education'])  # 学历要求
-
         # information['']=(job['firstType'])  # 工作类型
-
         # information['']=(job['formatCreateTime'])  # 发布时间
-
         information['jobName']=(job['positionName'])  # 职位名称
-
         information['workWageLabel']=(job['salary'])  # 薪资
         information['workYearLabel']=(job['workYear'])  # 工作年限
-
         fin_url = r'http://www.lagou.com/jobs/%s.html' % job['positionId']
         information['detail_url']=(fin_url)  # 职位详情页
-
-        job_detail=get_content(fin_url)
-        if job_detail is None or len(job_detail) == 0:
-            time.sleep(10)
+        job_detail_txt,job_detail_html=get_content(fin_url)
+        if job_detail_txt is None or len(job_detail_txt) == 0:
+            time.sleep(5)
             job_detail = get_content(job['positionId'])
-        information['jobDescription']=(job_detail)  # 工作描述
-        information['jobDuty'] = job_detail  # 工作职责
+        information['jobDescription']=(job_detail_txt)  # 工作描述
+        information['jobDuty'] = job_detail_html  # 工作职责
         listinfo.append(information)
     return listinfo
 
@@ -132,5 +119,5 @@ def get_content(fin_url):
     ses.get("https://www.lagou.com/jobs/list_python?px=new&city=%E5%85%A8%E5%9B%BD#order")
 
     reqs = ses.get(fin_url, headers=headers, timeout=30)
-    job_detail = p._parse_jobdetail(reqs.text)
-    return job_detail
+    job_detail_txt,job_detail_html = p._parse_jobdetail(reqs.text)
+    return job_detail_txt,job_detail_html
