@@ -95,7 +95,10 @@ def get_json(url, datas):
         information['workWageLabel']=(job['salary'])  # 薪资
         information['workYearLabel']=(job['workYear'])  # 工作年限
 
-        job_detail=get_content(job['positionId'])
+        fin_url = r'http://www.lagou.com/jobs/%s.html' % job['positionId']
+        information['detail_url']=(fin_url)  # 职位详情页
+
+        job_detail=get_content(fin_url)
         if job_detail is None or len(job_detail) == 0:
             time.sleep(10)
             job_detail = get_content(job['positionId'])
@@ -105,8 +108,7 @@ def get_json(url, datas):
     return listinfo
 
 # 获取职位页面，由PositionId和BaseUrl组合成目标地址
-def get_content(company_id):
-    fin_url = r'http://www.lagou.com/jobs/%s.html' % company_id
+def get_content(fin_url):
     print(fin_url)
     headers = {
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
