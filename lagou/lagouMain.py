@@ -12,13 +12,13 @@ Created on 19-9-18
 
 """
 
-import json
-from lagou import HtmlParser as p
-from common import HtmlDownLoader as downloader
 import time
-import requests
-from urllib import request
 import uuid
+
+import requests
+
+from lagou import HtmlParser as p
+
 
 # 获取存储职位信息的json对象，遍历获得公司名、福利待遇、工作地点、学历要求、工作类型、发布时间、职位名称、薪资、工作年限
 
