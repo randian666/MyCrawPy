@@ -4,7 +4,7 @@ import json
 class OutputManager(object):
     def __init__(self):
         self._es = Elasticsearch(['39.97.240.232'], http_auth=('elastic', 'wuyuexpack'), timeout=9200)
-    #添加数据到ES
+    #添加职业数据到ES
     def _add_data_to_es(self,jsonData):
         try:
             if jsonData is None:
@@ -16,6 +16,20 @@ class OutputManager(object):
             self._es.index(index="es_dt_recruit",doc_type="ed_recruit",body=jsonData)
         except Exception as e:
             print("error:data is{},error is {}".format(jsonData,str(e)))
+
+    #添加公司数据到ES
+    def _add_company_to_es(self,jsonData):
+        try:
+            if jsonData is None:
+                return
+                # 如果索引不存在，则创建索引
+            if self._es.indices.exists(index='es_ed_firm') is not True:
+                self._es.indices.create(index='es_ed_firm')
+            # 将refresh设为true，使得添加的文档可以立即搜索到；
+            self._es.index(index="es_ed_firm",doc_type="ed_firm",body=jsonData)
+        except Exception as e:
+            print("error:data is{},error is {}".format(jsonData,str(e)))
+
     #根据url删除数据
     def _del_data_by_url(self,url):
         self._es.delete_by_query(index="es_dt_recruit",body={"query": {"match": {'url':url}}})

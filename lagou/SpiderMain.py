@@ -7,6 +7,8 @@ class SpiderMain(object):
     def __init__(self):
         #存储到ES
         self.output=out.OutputManager()
+        #lg爬取器
+        self.lagou=lg.lagouMain()
     def craw(self,page):
         for x in range(1, page + 1):
             url = 'https://www.lagou.com/jobs/positionAjax.json?px=new&needAddtionalResult=false'
@@ -15,10 +17,12 @@ class SpiderMain(object):
                 'pn': x,#页码
                 'kd': '',#搜索关键字
             }
-            info = lg.get_json(url, datas)
+            info,companyList = self.lagou.get_json(url, datas)
             #结果写入es
             for data in info:
                 self.output._add_data_to_es(json.dumps(data))
+            for company in companyList:
+                self.output._add_company_to_es(json.dumps(company))
             print("第%s页正常采集，并写入ES。" % x)
 if __name__ == '__main__':
     page = int(input('请输入你要抓取的页码总数：'))
