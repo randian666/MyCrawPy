@@ -31,6 +31,7 @@ class HtmlDownLoader(object):
             headers={**headers,**headersArgs}
         try:
             reqs = requests.get(url, headers=headers, timeout=30)
+            reqs.encoding=html_encode
             if reqs.status_code!=200:
                 return None
             return reqs.text
