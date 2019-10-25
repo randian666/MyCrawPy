@@ -13,7 +13,7 @@ import requests
 class HtmlDownLoader(object):
     def download(self,url,html_encode="utf-8",headersArgs=None):
         #避免被反爬虫
-        time.sleep(3)
+        time.sleep(1)
         print('begin down url is ',url)
         host = urlparse(url).netloc
         headers = {

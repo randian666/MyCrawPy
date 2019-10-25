@@ -20,8 +20,8 @@ class SpiderMain(object):
                 # #解析页面内容
                 new_data = self.parser._parse_data(url, html_content)
                 # #内容存储到ES
-                # for json_data in new_data:
-                #     self.output._add_data_to_es(json_data)
+                for json_data in new_data:
+                    self.output._add_data_to_es(json_data)
             except Exception as e:
                 print("error:",e)
 
