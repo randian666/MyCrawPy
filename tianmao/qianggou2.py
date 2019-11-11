@@ -5,7 +5,17 @@ from selenium import webdriver
 import datetime
 import time
 
-
+'''
+1、首先安装selenium
+pip install selenium
+2、下载chromedriver
+https://npm.taobao.org/mirrors/chromedriver
+3、把chromedriver.exe放到Anaconda3里面的Scripts中
+4、运行脚本。
+5、扫码登陆15秒内完成。然后输入商品抢购时间。
+6、然后勾选购物车里面想要抢购的商品
+7、返回程序，在控制台中输入2代表手动勾选商品抢购
+'''
 def login():
     # 打开淘宝登录页，并进行扫码登录
     browser.get("https://www.taobao.com")
