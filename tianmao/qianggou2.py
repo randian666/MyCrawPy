@@ -30,7 +30,6 @@ def login():
     now = datetime.datetime.now()
     print('login success:', now.strftime('%Y-%m-%d %H:%M:%S'))
 
-
 def buy(times, choose):
     is_buyed = False
     # 点击购物车里全选按钮
