@@ -8,7 +8,7 @@ import time
 '''
 1、首先安装selenium
 pip install selenium
-2、下载chromedriver
+2、下载chromedriver，要跟当前浏览器的版本一致。
 https://npm.taobao.org/mirrors/chromedriver
 3、把chromedriver.exe放到Anaconda3里面的Scripts中
 4、运行脚本。
