@@ -67,7 +67,7 @@ def buy(times, choose):
             time.sleep(0.005)
 
 if __name__ == "__main__":
-    times = input("请输入抢购时间，格式如(2019-11-11 16:00:00.000000):")
+    times = input("请输入抢购时间，格式如(2019-11-11 19:00:00.000000):")
     browser = webdriver.Chrome()
     browser.maximize_window()
     login()
