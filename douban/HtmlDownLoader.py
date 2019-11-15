@@ -19,10 +19,11 @@ class HtmlDownLoader(object):
         # charset = chardet.detect(html);
         return html.decode(html_encode)
 if __name__ == '__main__':
-    url="https://book.douban.com/subject/1082154/"
+    url="https://www.lagou.com/gongsi/"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
-    parser=HtmlParser.HtmlParser()
-    new_urls,new_datas=parser.parse(url,data)
-    print(new_urls)
-    print(new_datas)
+    print(data)
+    # parser=HtmlParser.HtmlParser()
+    # new_urls,new_datas=parser.parse(url,data)
+    # print(new_urls)
+    # print(new_datas)

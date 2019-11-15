@@ -74,3 +74,9 @@ def _parse_companydetail(url,html_content,html_encode="utf-8"):
         companyDetail["cityAddress"]=ele_cityAddr.get_text().strip()
     print(companyDetail)
     return companyDetail
+
+def _parse_showid(url,html_content,html_encode="utf-8"):
+    soup = BeautifulSoup(html_content, "html.parser", from_encoding=html_encode)
+    ele_company_list=soup.find("div",id="company_list")
+    ele_a=ele_company_list.find_all("a")
+    return ele_a[0].get('data-lg-webtj-_show_id')

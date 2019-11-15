@@ -20,8 +20,8 @@ class SpiderMain(object):
             info = self.lagou.get_json(url, datas)
             print(info)
             #职位信息结果写入es
-            # for data in info:
-            #     self.output._add_data_to_es(json.dumps(data))
+            for data in info:
+                self.output._add_data_to_es(json.dumps(data))
             #公司信息结果写入es
             # for company in companyList:
             #     self.output._add_company_to_es(json.dumps(company))

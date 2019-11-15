@@ -41,7 +41,7 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="http://www.lagou.com/jobs/5617112.html?show=13cb3d09998246c0895dd6e4433077b5"
+    url="https://www.lagou.com/gongsi/"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     print(data)

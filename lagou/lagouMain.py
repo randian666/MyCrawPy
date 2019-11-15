@@ -18,7 +18,7 @@ import uuid
 import requests
 
 from lagou import HtmlParser as p
-
+from common import UrlManager as u,HtmlDownLoader as d
 
 class lagouMain(object):
     def __init__(self):
@@ -92,15 +92,11 @@ class lagouMain(object):
             job_detail_txt, job_detail_html = self.get_content(fin_url)
             if job_detail_txt is None or len(job_detail_txt) == 0:
                 time.sleep(5)
-                job_detail = self.get_content(job['positionId'])
+                job_detail_txt, job_detail_html = self.get_content(job['positionId'])
             information['jobDescription'] = (job_detail_txt)  # 工作描述
             information['jobDuty'] = job_detail_html  # 工作职责
+            information['companyId']=job['companyId']     # 公司ID
             listinfo.append(information)
-            # 公司ID
-            # companyId=job['companyId']
-            # companyInfo=self.get_firm(companyId)
-            # if companyInfo is not None:
-            #     listCompany.append(companyInfo)
         return listinfo
 
     '''
@@ -117,31 +113,6 @@ class lagouMain(object):
     '''
     获取企业信息
     '''
-
-    def get_company_json(self, url, datas):
-        my_headers = {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36",
-            "Referer": "https://www.lagou.com",
-            "Content-Type": "application/x-www-form-urlencoded;charset = UTF-8"
-        }
-        time.sleep(5)
-        s = requests.session()  # 获取session
-        s.headers.update(my_headers)  # 更新
-        s.get("https://gate.lagou.com/v1/entry/privacyPolicy/query",headers=my_headers,timeout=5)
-        cookie = s.cookies  # 为此次获取的cookies
-        print(cookie)
-        response = s.post(url, data=datas, headers=my_headers, cookies=cookie, timeout=5)  # 获取此次文本
-        #time.sleep(3)
-        result = response.json()
-        print(result)
-        listCompany = []
-        # 公司ID
-        # companyId=job['companyId']
-        # companyInfo=self.get_firm(companyId)
-        # if companyInfo is not None:
-        #     listCompany.append(companyInfo)
-        return listCompany
-
     def get_firm(self, companyId):
         firm_url = r'http://www.lagou.com/gongsi/%s.html' % companyId
         # url防重
@@ -149,6 +120,7 @@ class lagouMain(object):
             return None
         reqs = self.get_response_url(firm_url)
         companyInfo = p._parse_companydetail(firm_url, reqs.text)
+        companyInfo['companyId'] = companyId  # 公司ID
         self.old_urls.add(firm_url)
         return companyInfo
 
@@ -175,6 +147,10 @@ class lagouMain(object):
         reqs = ses.get(url, headers=headers, timeout=30)
         return reqs
 
+    def get_showid(self,url):
+        downloader = d.HtmlDownLoader()
+        content=downloader.download(url)
+        return p._parse_showid(url,content)
 
 if __name__ == '__main__':
     lg = lagouMain()
