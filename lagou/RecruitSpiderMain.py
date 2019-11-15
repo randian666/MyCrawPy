@@ -17,15 +17,17 @@ class SpiderMain(object):
                 'pn': x,#页码
                 'kd': '',#搜索关键字
             }
-            info,companyList = self.lagou.get_json(url, datas)
+            info = self.lagou.get_json(url, datas)
+            print(info)
             #职位信息结果写入es
-            for data in info:
-                self.output._add_data_to_es(json.dumps(data))
+            # for data in info:
+            #     self.output._add_data_to_es(json.dumps(data))
             #公司信息结果写入es
-            for company in companyList:
-                self.output._add_company_to_es(json.dumps(company))
+            # for company in companyList:
+            #     self.output._add_company_to_es(json.dumps(company))
             print("第%s页正常采集，并写入ES。" % x)
 if __name__ == '__main__':
+    keyword = str(input('请输入你要抓取职位关键字：'))
     page = int(input('请输入你要抓取的页码总数：'))
     smain=SpiderMain()
     smain.craw(page)

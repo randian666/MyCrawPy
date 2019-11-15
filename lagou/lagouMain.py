@@ -18,12 +18,15 @@ import uuid
 import requests
 
 from lagou import HtmlParser as p
+
+
 class lagouMain(object):
     def __init__(self):
-        #url链接管理器
+        # url链接管理器
         self.old_urls = set()  # 已爬取的Url集合
+
     # 获取存储职位信息的json对象，遍历获得公司名、福利待遇、工作地点、学历要求、工作类型、发布时间、职位名称、薪资、工作年限
-    def get_json(self,url, datas):
+    def get_json(self, url, datas):
         my_headers = {
 
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36",
@@ -47,15 +50,15 @@ class lagouMain(object):
         result = content.json()
         info = result['content']['positionResult']['result']
         print(info)
-        listinfo=[]
-        listCompany=[]
+        listinfo = []
+        # listCompany=[]
         for job in info:
             information = {}
-            information['uuid']=str(uuid.uuid1())
-            information['userId']="148"
-            information['firmId'] = ""  #所属公司编号
-            information['online'] = "" #在线状态
-            information['jobId'] = "-1" #职位类型编号
+            information['uuid'] = str(uuid.uuid1())
+            information['userId'] = "148"
+            information['firmId'] = ""  # 所属公司编号
+            information['online'] = ""  # 在线状态
+            information['jobId'] = "-1"  # 职位类型编号
             information['cityId'] = ""  # 企业办公地方编号
             information['hcTotal'] = "-1"  # 招聘人数
             information['workType'] = ""  # 工作性质标签
@@ -70,60 +73,87 @@ class lagouMain(object):
             information['createTime'] = (job['createTime'])  # 创建时间
             information['updateTime'] = (job['createTime'])  # 更新时间
             information['workTypeLabel'] = (job['jobNature'])  # 工作性质
-            information['longitude']=(job['longitude'])  # 经度
-            information['latitude']=(job['latitude'])  # 纬度
-            information['cityName']=(job['city'])  # 岗位对应城市
-            information['firmName']=(job['companyFullName'])  # 公司全名
+            information['longitude'] = (job['longitude'])  # 经度
+            information['latitude'] = (job['latitude'])  # 纬度
+            information['cityName'] = (job['city'])  # 岗位对应城市
+            information['firmName'] = (job['companyFullName'])  # 公司全名
             information['firmLogo'] = (job['companyLogo'])  # 公司logo
-            information['affordTags']=",".join(job['companyLabelList'])  # 福利待遇
-            information['skillTags']=",".join(job['skillLables'])  # 技能要求
-            information['cityAddress']=(job['district'])  # 工作地点
-            information['workEduLabel']=(job['education'])  # 学历要求
+            information['affordTags'] = ",".join(job['companyLabelList'])  # 福利待遇
+            information['skillTags'] = ",".join(job['skillLables'])  # 技能要求
+            information['cityAddress'] = (job['district'])  # 工作地点
+            information['workEduLabel'] = (job['education'])  # 学历要求
             # information['']=(job['firstType'])  # 工作类型
             # information['']=(job['formatCreateTime'])  # 发布时间
-            information['jobName']=(job['positionName'])  # 职位名称
-            information['workWageLabel']=(job['salary'])  # 薪资
-            information['workYearLabel']=(job['workYear'])  # 工作年限
+            information['jobName'] = (job['positionName'])  # 职位名称
+            information['workWageLabel'] = (job['salary'])  # 薪资
+            information['workYearLabel'] = (job['workYear'])  # 工作年限
             fin_url = r'http://www.lagou.com/jobs/%s.html' % job['positionId']
-            information['detail_url']=(fin_url)  # 职位详情页
-            job_detail_txt,job_detail_html=self.get_content(fin_url)
+            information['detail_url'] = (fin_url)  # 职位详情页
+            job_detail_txt, job_detail_html = self.get_content(fin_url)
             if job_detail_txt is None or len(job_detail_txt) == 0:
                 time.sleep(5)
                 job_detail = self.get_content(job['positionId'])
-            information['jobDescription']=(job_detail_txt)  # 工作描述
+            information['jobDescription'] = (job_detail_txt)  # 工作描述
             information['jobDuty'] = job_detail_html  # 工作职责
             listinfo.append(information)
-            #公司ID
-            companyId=job['companyId']
-            companyInfo=self.get_firm(companyId)
-            if companyInfo is not None:
-                listCompany.append(companyInfo)
-        return listinfo,listCompany
+            # 公司ID
+            # companyId=job['companyId']
+            # companyInfo=self.get_firm(companyId)
+            # if companyInfo is not None:
+            #     listCompany.append(companyInfo)
+        return listinfo
 
     '''
     获取职位描述
     获取职位页面，由PositionId和BaseUrl组合成目标地址
     '''
-    def get_content(self,fin_url):
+
+    def get_content(self, fin_url):
         print(fin_url)
         reqs = self.get_response_url(fin_url)
-        job_detail_txt,job_detail_html = p._parse_jobdetail(reqs.text)
-        return job_detail_txt,job_detail_html
+        job_detail_txt, job_detail_html = p._parse_jobdetail(reqs.text)
+        return job_detail_txt, job_detail_html
+
     '''
     获取企业信息
     '''
-    def get_firm(self,companyId):
-        firm_url=r'http://www.lagou.com/gongsi/%s.html' % companyId
-        #url防重
+
+    def get_company_json(self, url, datas):
+        my_headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36",
+            "Referer": "https://www.lagou.com",
+            "Content-Type": "application/x-www-form-urlencoded;charset = UTF-8"
+        }
+        time.sleep(5)
+        s = requests.session()  # 获取session
+        s.headers.update(my_headers)  # 更新
+        s.get("https://gate.lagou.com/v1/entry/privacyPolicy/query",headers=my_headers,timeout=5)
+        cookie = s.cookies  # 为此次获取的cookies
+        print(cookie)
+        response = s.post(url, data=datas, headers=my_headers, cookies=cookie, timeout=5)  # 获取此次文本
+        #time.sleep(3)
+        result = response.json()
+        print(result)
+        listCompany = []
+        # 公司ID
+        # companyId=job['companyId']
+        # companyInfo=self.get_firm(companyId)
+        # if companyInfo is not None:
+        #     listCompany.append(companyInfo)
+        return listCompany
+
+    def get_firm(self, companyId):
+        firm_url = r'http://www.lagou.com/gongsi/%s.html' % companyId
+        # url防重
         if firm_url in self.old_urls:
             return None
         reqs = self.get_response_url(firm_url)
-        companyInfo=p._parse_companydetail(firm_url,reqs.text)
+        companyInfo = p._parse_companydetail(firm_url, reqs.text)
         self.old_urls.add(firm_url)
         return companyInfo
 
-    def get_response_url(self,url):
-        headers ={
+    def get_response_url(self, url):
+        headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'zh-CN,zh;q=0.9,zh-TW;q=0.8,en;q=0.7',
@@ -145,6 +175,7 @@ class lagouMain(object):
         reqs = ses.get(url, headers=headers, timeout=30)
         return reqs
 
+
 if __name__ == '__main__':
-    lg=lagouMain()
+    lg = lagouMain()
     lg.get_firm('84440587')
