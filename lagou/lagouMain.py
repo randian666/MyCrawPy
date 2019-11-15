@@ -105,7 +105,6 @@ class lagouMain(object):
     '''
 
     def get_content(self, fin_url):
-        print(fin_url)
         reqs = self.get_response_url(fin_url)
         job_detail_txt, job_detail_html = p._parse_jobdetail(reqs.text)
         return job_detail_txt, job_detail_html
@@ -115,10 +114,14 @@ class lagouMain(object):
     '''
     def get_firm(self, companyId):
         firm_url = r'http://www.lagou.com/gongsi/%s.html' % companyId
+        print("开始处理：",firm_url)
         # url防重
         if firm_url in self.old_urls:
             return None
-        reqs = self.get_response_url(firm_url)
+        while True:
+            reqs = self.get_response_url(firm_url)
+            if reqs is not None:
+                break;
         companyInfo = p._parse_companydetail(firm_url, reqs.text)
         companyInfo['companyId'] = companyId  # 公司ID
         self.old_urls.add(firm_url)
@@ -140,11 +143,12 @@ class lagouMain(object):
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.75 Safari/537.36'
         }
-        print(url)
         ses = requests.session()  # 获取session
         ses.headers.update(headers)  # 更新
         ses.get("https://www.lagou.com/jobs/list_python?px=new&city=%E5%85%A8%E5%9B%BD#order")
         reqs = ses.get(url, headers=headers, timeout=30)
+        if reqs.status_code != 200:
+            return None
         return reqs
 
     def get_showid(self,url):

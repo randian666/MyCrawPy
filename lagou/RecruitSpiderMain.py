@@ -22,9 +22,6 @@ class SpiderMain(object):
             #职位信息结果写入es
             for data in info:
                 self.output._add_data_to_es(json.dumps(data))
-            #公司信息结果写入es
-            # for company in companyList:
-            #     self.output._add_company_to_es(json.dumps(company))
             print("第%s页正常采集，并写入ES。" % x)
 if __name__ == '__main__':
     keyword = str(input('请输入你要抓取职位关键字：'))

@@ -72,7 +72,6 @@ def _parse_companydetail(url,html_content,html_encode="utf-8"):
     ele_cityAddr=soup.select_one(".mlist_li_desc")
     if ele_cityAddr is not None:
         companyDetail["cityAddress"]=ele_cityAddr.get_text().strip()
-    print(companyDetail)
     return companyDetail
 
 def _parse_showid(url,html_content,html_encode="utf-8"):
