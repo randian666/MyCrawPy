@@ -2,7 +2,9 @@
 
 from lagou import lagouMain as lg, OutputManager as out
 import json
-
+'''
+职位信息爬取
+'''
 class SpiderMain(object):
     def __init__(self):
         #存储到ES

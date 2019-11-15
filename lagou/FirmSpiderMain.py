@@ -3,7 +3,9 @@ import json
 import time
 from selenium import webdriver
 from lagou import lagouMain as lg, OutputManager as out
-
+'''
+公司信息爬取
+'''
 class SpiderMain(object):
     def __init__(self):
         self.showId=None
