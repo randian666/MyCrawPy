@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup
 import uuid
 import hashlib
+import time
 
 #获取指定页面的链接和内容
 def _parse_jobdetail(html_content,html_encode="utf-8"):
@@ -22,6 +23,7 @@ def _parse_companydetail(url,html_content,html_encode="utf-8"):
     companyDetail['uuid'] = str(uuid.uuid1())
     companyDetail['userId'] = "148"
     companyDetail['url'] = url
+    companyDetail['createDay']=time.strftime('%Y-%m-%d',time.localtime(time.time()))
     ele_company_info=soup.find("div",class_="company_info")
     ele_name=ele_company_info.select_one(".company_main>h2>a")
     if ele_name is not None:
