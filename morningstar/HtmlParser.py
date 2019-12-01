@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 from bs4 import BeautifulSoup
 import re
-import time
-from common import Recruit as recruit
 
 class HtmlParser(object):
     #获取指定页面的链接和内容

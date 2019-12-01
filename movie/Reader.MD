@@ -27,5 +27,9 @@ scrapy crawl meijutt --nolog
 #运行爬虫并输入到指定的文件中
 scrapy crawl meijutt --nolog -o movie.csv
 
+#调试网页
+scrapy shell http://www.taobao.com
+
+
 
 

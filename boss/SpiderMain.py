@@ -11,7 +11,7 @@ class SpiderMain(object):
         #解析器
         self.parser=p.HtmlParser()
         #存储到ES
-        self.output=o.OutputManager();
+        self.output=o.OutputManager('recruit_index','recruit');
     def craw_root(self,root_url):
         # 下载根页面内容
         html_content = self.downloader.download(root_url)
@@ -33,9 +33,9 @@ class SpiderMain(object):
                         continue
                     # #解析页面内容
                     new_data=self.parser._parse_data(new_url,html_content)
-                    # print(new_data)
+                    print(new_data)
                     # #内容存储到ES
-                    self.output._add_data_to_es(new_data)
+                    # self.output._add_data_to_es(new_data)
             except Exception as e:
                 print("error:",e)
 
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     # spider.craw_root("http://www.zhipin.com/c101010100/h_101010100/?page=%s&ka=page-%s"%(n,n))
     spider.craw_root("https://www.zhipin.com/")
     #解析子页面
-    # spider.craw()
-    # n=n+1
+    spider.craw()
+    n=n+1
 
 
 
