@@ -117,6 +117,7 @@ class lagouMain(object):
         print("开始处理：",firm_url)
         # url防重
         if firm_url in self.old_urls:
+            print("当前企业【%s】已经处理过了",firm_url)
             return None
         while True:
             reqs = self.get_response_url(firm_url)
@@ -158,4 +159,5 @@ class lagouMain(object):
 
 if __name__ == '__main__':
     lg = lagouMain()
-    lg.get_firm('84440587')
+    result=lg.get_firm('152987')
+    print(result)
