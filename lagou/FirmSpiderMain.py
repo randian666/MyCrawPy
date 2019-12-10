@@ -13,7 +13,17 @@ class SpiderMain(object):
         self.output=out.OutputManager()
         #lg爬取器
         self.lagou=lg.lagouMain()
-    def  selenium_craw(self,page,url):
+        # Url集合
+        self.all_urls = set()
+    def selenium_crawUrl(self,url):
+        browser.get(url)
+        time.sleep(3)  # 强制等待3秒再执行下一步
+        eles_areas=browser.find_element_by_class_name('word_list').find_elements_by_tag_name('a')
+        for word in eles_areas:
+            self.all_urls.add(word.get_attribute('href'))
+    def craw_companyurl(self):
+        pass;
+    def selenium_craw(self,page,url):
         browser.get(url)
         time.sleep(3)  # 强制等待3秒再执行下一步
         # 打印网页内容
@@ -41,7 +51,6 @@ class SpiderMain(object):
                  continue;
              self.output._add_company_to_es(json.dumps(companyinfo))
 if __name__ == '__main__':
-    page = int(input('请输入你要抓取的页码总数：'))
     smain=SpiderMain()
     # 加载启动项
     chrome_options = webdriver.ChromeOptions()
@@ -50,7 +59,14 @@ if __name__ == '__main__':
     chrome_options.add_argument('--disable-gpu') #如果不加这个选项，有时定位会出现问题
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.maximize_window()
-    smain.selenium_craw(page,"https://www.lagou.com/gongsi/")
+    # smain.selenium_craw(page,currUrl)
+    #获取所有地区的公司链接列表页地址
+    smain.selenium_crawUrl("https://www.lagou.com/gongsi/allCity.html?option=4-0-0-0")
+    #分别抓取每个地区公司列表页的公司然后写入ES
+    print("当前公司列表页数量为：",len(smain.all_urls))
+    for url in smain.all_urls:
+        print("开始爬取：",url)
+        smain.selenium_craw(20, url)
 
 
 

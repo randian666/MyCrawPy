@@ -49,11 +49,13 @@ class lagouMain(object):
 
         result = content.json()
         info = result['content']['positionResult']['result']
+        currDay = time.strftime('%Y-%m-%d', time.localtime(time.time()))
         print(info)
         listinfo = []
         # listCompany=[]
         for job in info:
             information = {}
+            information['createDay'] = currDay #数据爬取的日期
             information['uuid'] = str(uuid.uuid1())
             information['userId'] = "148"
             information['firmId'] = ""  # 所属公司编号
