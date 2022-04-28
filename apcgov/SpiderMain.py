@@ -70,10 +70,10 @@ class SpiderMain(object):
                                 # {"877":"Carfentrazone-ethyl"},
                                 # {"531":"Chinosol"},
                                 # {"779":"Chlorantraniliprole"},
-                                {"532":"Chlorfenapyr"},
-                                {"533":"Chlorfluazuron"},
-                                {"534":"Chlorophacinone"},
-                                {"823":"Chloropicrin"},
+                                # {"532":"Chlorfenapyr"},
+                                # {"533":"Chlorfluazuron"},
+                                # {"534":"Chlorophacinone"},
+                                # {"823":"Chloropicrin"},
                                 {"752":"Chlorothalonil"},
                                 {"535":"Chlorpyrifos"},
                                 {"536":"Chlorpyrifos-methyl"},
@@ -499,25 +499,14 @@ class SpiderMain(object):
                 page=i%12+3
             if(page>=13):
                 continue
-            flag=False
-            #重试5次
-            for i in range(5):
-                try:
-                    pageTag=driver.find_elements_by_xpath('//*[@id="content_ContentPlaceHolder1_SearchResult_GV"]/tbody/tr[9]/td/table/tbody/tr/td['+str(page)+']/a')
-                    if len(pageTag)>0:
-                        pageTag[0].click()
-                        currPage=currPage+1
-                        self.pageHandler(fileName,driver,currPage)
-                        break
-                    else:
-                        flag=True
-                        break
-                except BaseException as error:
-                    print(error)
-                    continue;
-            if flag:
+            pageTag=driver.find_elements_by_xpath('//*[@id="content_ContentPlaceHolder1_SearchResult_GV"]/tbody/tr[9]/td/table/tbody/tr/td['+str(page)+']/a')
+            if len(pageTag)>0:
+                pageTag[0].click()
+                currPage=currPage+1
+                self.pageHandler(fileName,driver,currPage)
+            else:
                 print("分页抓取结束！共处理"+str(currPage)+"页")
-                return;
+                break
 if __name__ == '__main__':
     spider=SpiderMain()
     driver=spider.getDriver()
@@ -532,7 +521,8 @@ if __name__ == '__main__':
             try:
                 spider.listHandler(driver,rootUrl,fileName);
             except BaseException as e:
-                print("爬取数据失败,"+str(e))
+                print(fileName+"爬取数据失败,"+str(e))
+                break;
             print(fileName+"爬取数据结束")
     finally:
         driver.quit()
