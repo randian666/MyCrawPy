@@ -5,7 +5,6 @@
 对指定的URL网页内容进行下载。
 '''
 from urllib import request
-from morningstar import HtmlParser
 from urllib.parse import urlparse
 import time
 import requests
@@ -41,7 +40,7 @@ class HtmlDownLoader(object):
             print(e.reason)
 
 if __name__ == '__main__':
-    url="https://www.lagou.com/gongsi/"
+    url="http://www.apc.gov.eg/en/PesticideDetails.aspx?id=2187"
     html=HtmlDownLoader()
     data=html.download(url,'utf-8')
     print(data)
